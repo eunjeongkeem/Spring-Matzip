@@ -10,7 +10,7 @@
 	</insert>
 	<!-- crud / $대신 #씀-->
 	
-	<select id="selUser" parameterType="UserDTO" resultType="UserDMI">
+	<select id="selUser" parameterType="UserPARAM" resultType="UserDMI">
 		SELECT i_user, user_id, user_pw, salt, nm, profile_img, r_dt
 		FROM t_user
 		WHERE <if test="i_user > 0">i_user = #{i_user}</if>
