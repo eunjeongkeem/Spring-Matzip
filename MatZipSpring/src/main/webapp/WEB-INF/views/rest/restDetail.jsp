@@ -10,7 +10,7 @@
 			<c:if test="${loginUser.i_user == data.i_user}">
 				<div class="recMenuItem">
 					<button onclick="isDel()">가게 삭제</button>
-					<form id="recFrm" action="/restaurant/addRecMenusProc" enctype="multipart/form-data" method="post">
+					<form id="recFrm" action="/rest/recMenus" enctype="multipart/form-data" method="post">
 					<!-- 파일넣을때 enctype가 필요 -->
 						<div><button type="button" onclick="addRecMenu()">추천메뉴 추가</button></div>
 						<input type="hidden" name="i_rest" value="${data.i_rest}">
@@ -21,7 +21,7 @@
 				</div>
 				<h2>- 메뉴 -</h2>
 				<div>
-					<form id="menuFrm" action="/rest/recMenus"enctype="multipart/form-data"  method="post">
+					<form id="menuFrm" action="/rest/menus"enctype="multipart/form-data"  method="post">
 						<input type="hidden" name="i_rest" value="${data.i_rest}">
 						<input type="file" name="menu_pic" multiple>
 						<div><input type="submit" value="등록"></div>
@@ -29,11 +29,11 @@
 				</div>
 			</c:if>
 			<div class="recMenuContainer">
-				<c:forEach items="${recommendMenuList}" var="item">
+				<c:forEach items="${recMenuList}" var="item">
 					<div class="recMenuItem" id="recMenuItem_${item.seq}">
 						<div class="pic">
 							<c:if test="${item.menu_pic != null && item.menu_pic != ''}">
-								<img alt="" src="/res/img/restaurant/${data.i_rest}/${item.menu_pic}">
+								<img alt="" src="/res/img/rest/${data.i_rest}/rec_menu/${item.menu_pic}">
 							</c:if>
 						</div>
 						<div class="info">
@@ -41,7 +41,7 @@
 							<div class="price"><fmt:formatNumber type="number" value="${item.menu_price}"/></div>
 						</div>
 						<c:if test="${loginUser.i_user == data.i_user}">
-						<div class="delIconContainer" onclick="delRecMenu(${data.i_rest}, ${item.seq},'${item.menu_pic}')">
+						<div class="delIconContainer" onclick="delRecMenu(${data.i_rest}, ${item.seq})">
 							<span class="material-icons">clear</span>
 						</div>
 						</c:if>
@@ -83,7 +83,7 @@
 										<c:if test="${fn:length(menuList) >0 }">
 										<c:forEach var="i" begin="0" end="${fn:length(menuList) > 3 ? 2 : fn:length(menuList) - 1}">
 											<div class="menuItem">
-												<img src="/res/img/restaurant/${data.i_rest}/menu/${menuList[i].menu_pic}">
+												<img src="/res/img/rest/${data.i_rest}/menu/${menuList[i].menu_pic}">
 											</div>
 										</c:forEach>
 										</c:if>
@@ -106,15 +106,15 @@
 </div>
 <script src="http://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
-	function delRecMenu(i_rest,seq, fileNm) {
+	function delRecMenu(i_rest, seq, fileNm) {
 		console.log('i_rest : ' + i_rest)
 		console.log('seq : ' + seq)
 		console.log('fileNm : ' + fileNm)
 		
-		axios.get('/restaurant/ajaxDelRecMenu', {
+		axios.get('/rest/ajaxDelRecMenu', {
 			params: {
 				i_rest: i_rest, /* el식은 고정값*/
-				seq, fileNm
+				seq,fileNm
 			}
 		}).then(function(res) {
 			if(res.data == 1) {

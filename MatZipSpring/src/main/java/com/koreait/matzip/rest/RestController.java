@@ -19,6 +19,7 @@ import com.koreait.matzip.SecurityUtils;
 import com.koreait.matzip.ViewRef;
 import com.koreait.matzip.rest.model.RestDMI;
 import com.koreait.matzip.rest.model.RestPARAM;
+import com.koreait.matzip.rest.model.RestRecMenuVO;
 import com.koreait.matzip.rest.model.RestVO;
 
 @Controller
@@ -67,6 +68,11 @@ public class RestController {
 	@RequestMapping("/detail")
 	public String detail(RestPARAM param, Model model) {
 		RestDMI data = service.selRest(param);
+		List<RestRecMenuVO> recMenuList = service.selRestRecMenus(param);
+		
+		
+		model.addAttribute("recMenuList", recMenuList);
+		model.addAttribute("css", new String[]{"restaurant"});
 		model.addAttribute("data", data);
 		model.addAttribute(Const.TITLE, data.getNm()); // 가게명
 		model.addAttribute(Const.VIEW, "rest/restDetail");
@@ -91,16 +97,21 @@ public class RestController {
 	@RequestMapping(value="/recMenus", method=RequestMethod.POST)
 	public String recMenus(MultipartHttpServletRequest mReq, RedirectAttributes ra) {
 		System.out.println("/recMenus");
-		int i_rest = Integer.parseInt(mReq.getParameter("i_rest"));
-		List<MultipartFile> fileList = mReq.getFiles("menu_pic");
-		String[] menuNmArr = mReq.getParameterValues("menu_nm");
-		String[] menuPriceArr = mReq.getParameterValues("menu_price");
 		
-		service.insRecMenus(i_rest, fileList, menuNmArr, menuPriceArr);
+		int i_rest = service.insRecMenus(mReq);
 		
 		ra.addAttribute("i_rest", i_rest);
 		return "redirect:/rest/detail";
 	}
+	
+	@RequestMapping("/ajaxDelRecMenu")
+	@ResponseBody public int ajaxDelRecMenu(RestPARAM param, HttpSession hs) {
+		String path = "/resources/img/rest/" + param.getI_rest() + "/rec_menu/";
+		String realPath = hs.getServletContext().getRealPath(path);
+		param.setI_user(SecurityUtils.getLoginUserPk(hs)); //로긴 유저 pk담기
+		return service.delRecMenu(param, realPath);
+	}
+
 	
 	
 	
