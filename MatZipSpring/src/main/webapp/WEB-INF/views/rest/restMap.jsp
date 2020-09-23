@@ -8,28 +8,57 @@
 	.label .right {background: url("https://t1.daumcdn.net/localimg/localimages/07/2011/map/storeview/tip_r.png") -1px 0  no-repeat;display: inline-block;height: 24px;overflow: hidden;width: 6px;}
 </style>    
 <div id="sectionContainerCenter">
-	<div id="map" style="width:100%; height:100%;"></div>
+	<div id="mapContainer" style="width:100%; height:100%;"></div>
 	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=4db36e68e4d4c277da98ebb45d905c3d"></script>
 	<script src="http://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 	<script>
+		var markerList = []
+	
 		const container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
 		const options = { //지도를 생성할 때 필요한 기본 옵션
 			center: new kakao.maps.LatLng(35.8641294, 128.5942331), //지도의 중심좌표.
 			level: 5 //지도의 레벨(확대, 축소 정도)
 		};
 	
-		const map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
+		const map = new kakao.maps.Map(mapContainer, options); //지도 생성 및 객체 리턴
 		
 		console.log(map.getCenter())
 		
 		function getRestaurantList() {
-			axios.get('/restaurant/ajaxGetList').then(function(res) {
+			//마커 모두 지우기
+			markerList.forEach(function(marker) {
+				marker.setMap(null)
+			})
+			//지도의 현재 영역을 얻어옴
+			const bounds = map.getBounds()
+			 // 영역의 남서쪽 좌표를 얻어옵니다 
+			const southWest = bounds.getSouthWest()
+			
+			// 영역의 북동쪽 좌표를 얻어옵니다 
+			const northEast = bounds.getNorthEast()
+			
+			console.log('southWest :' + southWest)
+			console.log('northEast :' + northEast)
+			
+			const sw_lat = southWest.getLat()
+			const sw_lng = southWest.getLng()
+			const ne_lat = northEast.getLat()
+			const ne_lng = northEast.getLng()
+			
+			
+			axios.get('/rest/ajaxGetList',{
+				params: {
+					sw_lat, sw_lng, ne_lat, ne_lng
+				}
+			}).then(function(res) {
+				console.log(res)
 				res.data.forEach(function(item) {
 					createMarker(item)
 				})
 			})
 		}
-		getRestaurantList()
+		kakao.maps.event.addListener(map, 'tilesloaded', getRestaurantList)
+		
 		//마커 생성	
 		function createMarker(item) {
 			var content = document.createElement('div')
@@ -51,13 +80,14 @@
 			
 	//		let content = `<div class ="label"><span class="left"></span><span class="center">\${item.nm}</span><span class="right"></span></div>`
 			let mPos = new kakao.maps.LatLng(item.lat, item.lng)
-			let marker2 = new kakao.maps.Marker({
+			let marker = new kakao.maps.Marker({
 				position: mPos,
 				content: content
 			})
-			marker2.setMap(map)
+			marker.setMap(map)
+			markerList.push(marker)
 			
-			let marker = new kakao.maps.CustomOverlay({
+			let marker2 = new kakao.maps.CustomOverlay({
 				position: mPos,
 				content: content
 			})
@@ -67,11 +97,13 @@
 				moveToDetail(item.i_rest)
 			})
 			//마커가 지도 위에 표시되도록 설정
-			marker.setMap(map)			
+			marker2.setMap(map)	
 			
+			markerList.push(marker2)
 		}
+
 		function moveToDetail(i_rest) {
-			location.href= '/restaurant/restDetail?i_rest=' + i_rest
+			location.href= '/rest/detail?i_rest=' + i_rest
 		}
 		function addEvent(target, type, callback) {
 			if(target.addEventListener) {
@@ -80,13 +112,6 @@
 				target.attachEvent('on' + type, callback)
 			}
 		}
-		/*
-			na: {
-				Ga: 128.5942107684672
-				Ha: 35.86410635758569
-			}
-		*/
-		
 		if(navigator.geolocation) {
 			console.log('Geolocation is supported!');
 			var startPos;

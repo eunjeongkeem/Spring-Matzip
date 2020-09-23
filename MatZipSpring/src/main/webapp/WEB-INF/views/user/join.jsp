@@ -19,15 +19,15 @@
 	<script>
 		function chkId() {
 			const user_id = frm.user_id.value
-			axios.get('/user/ajaxIdChk', {
-				params: { //get방식, 쿼리스트링일때만 params로 , post방식 일땐 params 없이 보내주면 됨
+			axios.post('/user/ajaxIdChk', {
+				//params: { //get방식, 쿼리스트링일때만 params로 , post방식 일땐 params 없이 보내주면 됨
 					'user_id' : user_id //key : value
-				}
+				//}
 			}).then(function(res) {
 				console.log(res)
-				if(res.data.result == 2) { //아이디 없음
+				if(res.data == '2') { //아이디 없음
 					idChkResult.innerText = '사용할 수 있는 아이디입니다.'
-				} else if(res.data.result == 3) { //아이디 중복됨
+				} else if(res.data == '3') { //아이디 중복됨
 					idChkResult.innerText = '이미 사용중입니다.'
 				}
 			})

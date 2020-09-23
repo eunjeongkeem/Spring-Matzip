@@ -16,6 +16,7 @@
 	<div id="container">
 		<header>
 			<div id="headerLeft">
+			<c:if test="${loginUser != null}">
 				<div class="containerPImg">
 					<c:choose>
 						<c:when test="${loginUser.profile_img != null}">
@@ -26,12 +27,22 @@
 						</c:otherwise>
 					</c:choose>	
 				</div>
-					<span class="nm">${loginUser.nm}</span>님 welcome~
-					<div class="logtout_a"><a href="/user/logout">로그아웃</a></div>
+					<div class="nm">${loginUser.nm}</div>님 welcome~
+					<div class="logtout_a ml15" id="headerLogout"><a href="/user/logout">로그아웃</a></div>
+			</c:if>
+			<c:if test="${loginUser == null}">
+				<div class="ml15" id="headerLogout"><a href="/user/login">로그인</a></div>
+			</c:if>
 			</div>
 			<div id="headerRight">
-				<a class="ml15" href="/restaurant/restMap">지도</a>
-				<a class="ml15" href="/restaurant/restReg">등록</a>
+				<a class="ml15" href="/rest/map">지도</a>
+				<c:if test="${loginUser != null }">
+					<a class="ml15" href="/rest/reg" onclick="moveToReg()">등록</a>
+				</c:if>
+				
+				<c:if test="${loginUser == null}">
+					<a class="ml15" href="#" onclick="alert('로그인이 필요합니다')"></a>
+				</c:if>
 				<a class="ml15" href="/user/restFavorite">찜하기</a>
 			</div>
 			

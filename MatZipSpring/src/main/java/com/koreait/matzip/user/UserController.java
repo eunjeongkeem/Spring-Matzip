@@ -5,9 +5,12 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.koreait.matzip.Const;
@@ -23,8 +26,16 @@ public class UserController {
 	//bean등록 된것이 단 하나만 있어야함 
 	private UserService service;
 	
+	@RequestMapping(value="/logout", method = RequestMethod.GET)
+	public String logout(HttpSession hs) {
+		hs.invalidate();
+		return "redirect:/user/login";
+	}
+	
+	
 	@RequestMapping(value="/login", method = RequestMethod.GET)
 	public String login(Model model) {
+		System.out.println("Controller - login");
 		model.addAttribute(Const.TITLE, "로그인");
 		model.addAttribute(Const.VIEW, "user/login");
 		return ViewRef.TEMP_DEFAULT;
@@ -44,14 +55,14 @@ public class UserController {
 		}
 		param.setMsg(msg);
 		ra.addFlashAttribute("data", param);  //addFlachAttribute 원리 -> session에 박히고 지워줌 
-		return "redirect:/user/login?err=" + result;
+		return "redirect:/user/login";
 	}
 	
 	@RequestMapping(value="/join", method = RequestMethod.GET)
 	public String join(Model model, @RequestParam(defaultValue="0") int err) { 
 		//required=false --> err값이 없어도 뜸... ,기본값은 true/ null값이 못들어가서 int 말고 Integer or
 		//required=false 없고 -> defaultValue= 0 err=0 넣어주지 않아도 됨 join들어가짐
-		System.out.println("err : " + err);
+		System.out.println("err : " + err);	
 		
 		if(err > 0) {
 			model.addAttribute("msg", "에러가 발생하였습니다.");
@@ -73,5 +84,13 @@ public class UserController {
 	
 	//addAttribute 쿼리스트링 만들어줌
 	//addFlashAttribute redirect하고 응답해주면 지움(Session 같은 역할)
+	
+	@RequestMapping(value="/ajaxIdChk", method=RequestMethod.POST)
+	@ResponseBody
+	public String ajaxIdChk(@RequestBody UserPARAM param) {
+		System.out.println("user_id : " + param.getUser_id());
+		int result = service.login(param);
+		return String.valueOf(result); //string 앞에 아무것두 없으니까  jsp를 찾는것 ?
+	}
 
 }

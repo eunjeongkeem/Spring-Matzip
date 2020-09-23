@@ -4,12 +4,15 @@
 	xmlns:beans="http://www.springframework.org/schema/beans"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+	xmlns:tx="http://www.springframework.org/schema/tx"
 	xsi:schemaLocation="http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd
 		http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
 		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
 
 	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
+	<context:property-placeholder location="classpath:config.properties"/>
 	
 	<!-- Enables the Spring MVC @Controller programming model -->
 	<annotation-driven /> 
@@ -29,13 +32,13 @@
 	<beans:bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
 		<beans:property name="poolName" value="springHikariCP" />
 		<beans:property name="connectionTestQuery" value="SELECT 1 FROM DUAL" />
-		<beans:property name="driverClassName" value="com.mysql.cj.jdbc.Driver" />
+		<beans:property name="driverClassName" value="${db.driver}" />
 		<beans:property name="maximumPoolSize" value="10" />
 		<beans:property name="idleTimeout" value="5000" />
 
-		<beans:property name="jdbcUrl" value="jdbc:mysql://127.0.0.1:3306/matzip?characterEncoding=UTF-8" />
-		<beans:property name="username" value="root" />
-		<beans:property name="password" value="koreait2020" />
+		<beans:property name="jdbcUrl" value="${db.url}" />
+		<beans:property name="username" value="${db.username}" />
+		<beans:property name="password" value="${db.password}" />
 	</beans:bean>
 
 	<beans:bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
@@ -49,5 +52,24 @@
 	</beans:bean>
 	
 	<mybatis-spring:scan base-package="com.koreait.matzip"/>
+	
+	<beans:bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<beans:property name="dataSource" ref="dataSource"></beans:property>
+	</beans:bean>
+	
+	<tx:annotation-driven transaction-manager="transactionManager"/>
+	
+	<interceptors>
+		<interceptor>
+			<mapping path="/**"/>
+			<beans:bean class="com.koreait.matzip.LoginCheckInterceptor"/>
+		</interceptor>
+	</interceptors>
+	
+	<!-- file Upload -->
+	
+	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"></beans:bean>
+		<beans:property name="maxUploadSize" value="5242880"/> <!-- 5MB -->
+	</beans:bean>	
 
 </beans:beans>

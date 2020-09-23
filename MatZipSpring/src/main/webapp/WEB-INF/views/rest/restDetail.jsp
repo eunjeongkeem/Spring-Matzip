@@ -9,7 +9,7 @@
 		<div>
 			<c:if test="${loginUser.i_user == data.i_user}">
 				<div class="recMenuItem">
-					<button onclick="isDel()">삭제</button>
+					<button onclick="isDel()">가게 삭제</button>
 					<form id="recFrm" action="/restaurant/addRecMenusProc" enctype="multipart/form-data" method="post">
 					<!-- 파일넣을때 enctype가 필요 -->
 						<div><button type="button" onclick="addRecMenu()">추천메뉴 추가</button></div>
@@ -21,7 +21,7 @@
 				</div>
 				<h2>- 메뉴 -</h2>
 				<div>
-					<form id="menuFrm" action="/restaurant/addMenusProc"enctype="multipart/form-data"  method="post">
+					<form id="menuFrm" action="/rest/recMenus"enctype="multipart/form-data"  method="post">
 						<input type="hidden" name="i_rest" value="${data.i_rest}">
 						<input type="file" name="menu_pic" multiple>
 						<div><input type="submit" value="등록"></div>
@@ -56,8 +56,8 @@
 						</span>
 					</div>
 					<div class="status branch_none">
-						<span class="cnt hit">${data.cntHits}</span>
-						<span class="cnt favorite">${data.cntFavorite}</span>
+						<span class="cnt hit">${data.hits}</span>
+						<span class="cnt favorite">${data.cnt_favorite}</span>
 					</div>
 				</div>
 				<div>
@@ -71,6 +71,10 @@
 							<tr>
 								<th>카테고리</th>
 								<td>${data.cd_category_nm}</td>
+							</tr>
+							<tr>
+								<th>작성자</th>
+								<td>${data.user_nm }</td>
 							</tr>
 							<tr>
 								<th>메뉴</th>
@@ -132,7 +136,7 @@
 		inputPrice.setAttribute('name', 'menu_price')
 		var inputPic = document.createElement('input')
 		inputPic.setAttribute('type', 'file')
-		inputPic.setAttribute('name', 'menu_pic_' + idx++)
+		inputPic.setAttribute('name', 'menu_pic')
 		
 		div.append('메뉴: ')
 		div.append(inputNm)
@@ -147,7 +151,7 @@
 		
 	function isDel() {
 		if(confirm('삭제 하시겠습니까?')) {
-			location.href= '/restaurant/restDel?i_rest=${data.i_rest}'
+			location.href= '/rest/del?i_rest=${data.i_rest}'
 		}
 	}
 </script>
