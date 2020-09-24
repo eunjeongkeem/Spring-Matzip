@@ -127,6 +127,7 @@
 	var idx = 0;
 	function addRecMenu() {
 		var div = document.createElement('div')
+		div.setAttribute('id', 'recMenu_' + idx++)
 		
 		var inputNm = document.createElement('input')
 		inputNm.setAttribute('type', 'text')
@@ -134,9 +135,17 @@
 		var inputPrice = document.createElement('input')
 		inputPrice.setAttribute('type', 'number')
 		inputPrice.setAttribute('name', 'menu_price')
+		inputPrice.value= '0'
 		var inputPic = document.createElement('input')
 		inputPic.setAttribute('type', 'file')
 		inputPic.setAttribute('name', 'menu_pic')
+		
+		var delBtn = document.createElement('input')
+		delBtn.setAttribute('type', 'button')
+		delBtn.setAttribute('value', 'X')
+		delBtn.addEventListener('click', function() {
+			div.remove()
+		})
 		
 		div.append('메뉴: ')
 		div.append(inputNm)
@@ -144,12 +153,13 @@
 		div.append(inputPrice)
 		div.append(' 사진: ')
 		div.append(inputPic)
+		div.append(delBtn)
 		
 		recItem.append(div)
 	}
 	addRecMenu()
 		
-	function isDel() {
+	function delRecMenu() {
 		if(confirm('삭제 하시겠습니까?')) {
 			location.href= '/rest/del?i_rest=${data.i_rest}'
 		}
