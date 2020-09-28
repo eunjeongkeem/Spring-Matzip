@@ -15,11 +15,9 @@ public class LoginCheckInterceptor extends HandlerInterceptorAdapter {
 	public boolean preHandle(HttpServletRequest request, 
 			HttpServletResponse response, Object handler) throws Exception {//controller가 실행 되기 전
 		String uri = request.getRequestURI();
-		System.out.println("uri : " + uri);
+		
 		String[] uriArr = uri.split("/");
-		
-		System.out.println("uriArr.length : " + uriArr.length);
-		
+
 		if(uri.equals("/")) {
 			return true;
 		} else if(uriArr[1].equals("res")) { //리소스(js, css, img)

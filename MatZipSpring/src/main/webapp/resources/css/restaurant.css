@@ -1,5 +1,6 @@
 @charset "UTF-8";
 .recMenuContainer {
+	z-index: 20;
 	width: 100%;
 	height: 200px;
 	overflow-x: scroll;
@@ -13,6 +14,7 @@
 	height: 90px;
 	position: relative;
 }
+
 .recMenuContainer > .recMenuItem:not(:first-child) {
 	margin-left: 7px;
 }
@@ -25,27 +27,28 @@
 .recMenuContainer > .recMenuItem > .pic > img {
 	width: 100%;
 }
+
 .recMenuContainer > .recMenuItem > .info {
 	width: 100%;
 	height: 30px;
 }
 
-.recMenuContainer > .recMenuItem > .delIconContainer {
+.delIconContainer {
 	cursor: pointer;
 	position: absolute;
 	top: 10px;
-	right:10px;
+	right: 10px;
 }
+
 .menuList {
 	display: flex;
 	height: 70px;
 }
 
 .menuList .menuItem {
-	display: inline-block;
+	position: relative;
 	width: 70px;
-	height: 70px;
-	color: white;
+	height: 70px;	
 }
 
 .menuList .menuItem:not(:first-child) {
@@ -58,6 +61,7 @@
 }
 
 .menuList .menuItem .moreCnt {
+	color: white;
 	width: 100%;
 	height: 100%;
 	display: flex;
@@ -65,8 +69,91 @@
 	align-items: center;
 }
 
-
-
 .restaurant-detail {
 	padding: 5px 0 10px 0;
+}
+
+#sectionContainerCenter {	
+	z-index: 20;
+	overflow: auto;
+}
+
+#carouselContainer {
+	transition: 1s;
+	opacity: 0;
+	z-index: -10;
+	left: 0;
+	top: 0;
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	background-color: #000A;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+#carouselContainer #imgContainer {
+	background-color: #fff;
+	width: 60%;
+	height: 80%;
+	position: relative;
+	overflow: hidden;
+}
+
+.material-icons {
+	cursor: pointer;	
+}
+
+#carouselContainer > .material-icons {
+	display: inline-block;
+	position: absolute;	
+	color: white;
+	cursor: pointer;
+	font-size: 2rem;
+	background-color: black;
+	top: 20px;
+	right: 20px;
+}
+
+.swiper-container {
+	height: 100%;
+}
+
+
+.swiper-container 
+.swiper-wrapper 
+.swiper-slide {
+	
+	display: flex;
+    justify-content: center;
+    align-items: center;	
+}    
+    
+.swiper-container 
+.swiper-wrapper 
+.swiper-slide
+img {
+	width: 100%;
+	height: auto;
+	overflow: hidden;
+}
+
+.swiper-container .imgDel {
+	position: absolute;
+	left: 10px;
+	top: 10px;
+	z-index: 100;
+	background-color: white;
+}
+
+.swiper-container .imgDel .material-icons {
+	font-size: 3rem;
+	color: black;
+}
+
+.swiper-slide .delIconContainer {
+	position: absolute;
+	top: 10px;
+	left: 10px;
 }

@@ -70,6 +70,7 @@ html, body {
 
 #container > section {
 	flex-grow: 1;
+	overflow: auto;
 }
 
 #container > footer {

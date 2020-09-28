@@ -21,7 +21,9 @@ public class UserService {
 		if(dbUser == null) {return Const.NO_ID;}
 		
 		String cryptPw = SecurityUtils.getEncrypt(param.getUser_pw(), dbUser.getSalt());
-		if(cryptPw.equals(dbUser.getUser_pw())) {return Const.NO_PW;}
+		System.out.println(cryptPw);
+		System.out.println(dbUser.getUser_pw());
+		if(!cryptPw.equals(dbUser.getUser_pw())) {return Const.NO_PW;}
 		
 		param.setI_user(dbUser.getI_user());
 		param.setUser_pw(null);

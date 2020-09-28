@@ -43,6 +43,10 @@ public class RestService {
 //		return gson.toJson(list);
 	}
 	
+	public List<RestRecMenuVO> selRestMenus(RestPARAM param) {
+		return mapper.selRestMenus(param);
+	}
+	
 	 public List<CodeVO> selCategoryList() {
 		CodeVO p = new CodeVO();
 		p.setI_m(1); //음식점 카테고리 코드 = 1
@@ -62,14 +66,6 @@ public class RestService {
 		mapper.delRestRecMenu(param);
 		mapper.delRestMenu(param);
 		mapper.delRest(param);
-	}
-	
-	public int delRestRecMenu(RestPARAM param) {
-		return mapper.delRestRecMenu(param);
-	}
-	
-	public int delRestMenu(RestPARAM param) {
-		return mapper.delRestMenu(param);
 	}
 	
 	public int insRecMenus(MultipartHttpServletRequest mReq) {
@@ -97,7 +93,7 @@ public class RestService {
 			vo.setMenu_nm(menu_nm);
 			vo.setMenu_price(menu_price);
 			
-			//파일 각 저장
+			//파일 값 저장
 			MultipartFile mf = fileList.get(i);
 			String saveFileNm = FileUtils.saveFile(path, mf);
 			vo.setMenu_pic(saveFileNm);	
@@ -114,7 +110,7 @@ public class RestService {
 			return mapper.selRestRecMenus(param);
 		}
 		
-		public int delRecMenu(RestPARAM param, String realPath) {
+		public int delRestRecMenu(RestPARAM param, String realPath) {
 			//파일 삭제 
 			List<RestRecMenuVO> list = mapper.selRestRecMenus(param);
 			if(list.size() == 1) { //삭제 할 정보가 넘어온것 
@@ -131,14 +127,26 @@ public class RestService {
 					}
 				}
 			}
-			return mapper.delRestRecMenu(param);
+			return mapper.delRestRecMenu(param); 
 		}
+		
+		public int delRestMenu(RestPARAM param) {
+			if(param.getMenu_pic() != null && "".equals(param.getMenu_pic())) {
+				String path = Const.realPath + "/resources/img/rest" + param.getI_rest() + "/menu/";
+				
+				if(FileUtils.delFile(path + param.getMenu_pic())) {
+					return mapper.delRestMenu(param);
+				} else {
+					return Const.FAIL;
+				}
+			}
+			return mapper.delRestMenu(param); // 파일이 없어도 삭제 가능
+		}
+		
 		public int insRestMenu(RestFile param, int i_user) {		
 			if(_authFail(param.getI_rest(), i_user)) {
 				return Const.FAIL;
 			}
-		
-			
 			String path = Const.realPath + "/resources/img/rest/" + param.getI_rest() + "/menu/";
 			
 			List<RestRecMenuVO> list = new ArrayList();
@@ -148,6 +156,7 @@ public class RestService {
 				list.add(vo);			
 				
 				String saveFileNm = FileUtils.saveFile(path, mf);
+				System.out.println("saveFileNm:" + saveFileNm);
 				vo.setMenu_pic(saveFileNm);
 				vo.setI_rest(param.getI_rest());
 			}
