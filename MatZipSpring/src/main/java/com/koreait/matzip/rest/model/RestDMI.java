@@ -4,7 +4,14 @@ public class RestDMI extends RestVO {
 	private String cd_category_nm;
 	private String user_nm;
 	private int cnt_favorite;
+	private int is_favorite;
 	
+	public int getIs_favorite() {
+		return is_favorite;
+	}
+	public void setIs_favorite(int is_favorite) {
+		this.is_favorite = is_favorite;
+	}
 	public String getCd_category_nm() {
 		return cd_category_nm;
 	}

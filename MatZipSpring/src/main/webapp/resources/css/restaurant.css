@@ -157,3 +157,13 @@ img {
 	top: 10px;
 	left: 10px;
 }
+.restaurant-detail .restaurant_title_wrap{
+	display: flex;
+	align-items: center;
+	
+}
+
+.restaurant-detail #favorite {
+	margin-left: 20px;
+	color: red;
+}
