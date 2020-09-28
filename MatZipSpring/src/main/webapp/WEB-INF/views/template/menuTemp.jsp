@@ -21,7 +21,7 @@
 				<div class="containerPImg">
 					<c:choose>
 						<c:when test="${loginUser.profile_img != null}">
-							<img clss= "pImg" src="/res/img/user/${loginUser.i_user}/${loginUser.profile_img}" alt="사용자지정 프로필">
+							<img class= "pImg" src="/res/img/user/${loginUser.i_user}/${loginUser.profile_img}" alt="사용자지정 프로필">
 						</c:when>
 						<c:otherwise>
 							<img class="pImg" src="/res/img/default_profile.jpg" alt="기본프로필">
