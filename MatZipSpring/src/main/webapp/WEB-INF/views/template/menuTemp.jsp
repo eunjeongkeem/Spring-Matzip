@@ -44,7 +44,7 @@
 				<c:if test="${loginUser == null}">
 					<a class="ml15" href="#" onclick="alert('로그인이 필요합니다')"></a>
 				</c:if>
-				<a class="ml15" href="/user/restFavorite">찜하기</a>
+				<a class="ml15" href="/user/favorite">찜하기</a>
 			</div>
 			
 		</header>

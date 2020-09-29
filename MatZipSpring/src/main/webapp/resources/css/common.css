@@ -36,7 +36,7 @@ html, body {
 	display: flex;
 	padding: 10px;
 	height: 70px;
-	background-color: #FFDAB9;
+	background-color: #BDB76B;
 }
 
 #container > header > #headerLeft {
@@ -118,13 +118,13 @@ html, body {
 .frm {
 	padding: 15px;
 	border-radius: 20%;
-	background-color:#FFDAB9;
+	background-color:#BDB76B;
 	font-family: 'Dovemayo-Medium';
 	
 }
 .borderNone > input {
 	border: none;
-	background-color: #FFDAB9;
+	background-color: #BDB76B;
 	color: black;
 	font-family: 'UhBeepuding';
 	font-weight: bold;
