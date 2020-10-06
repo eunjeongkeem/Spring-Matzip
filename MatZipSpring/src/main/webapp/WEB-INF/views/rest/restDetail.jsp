@@ -142,7 +142,7 @@
 			if(res.data == 1) {
 				favorite.innerText = ( icon == 'favorite' ? 'favorite_border' : 'favorite' )
 			}
-		})
+		});
 	}
 	function delMenu() {
 		if(!confirm('삭제하시겠습니까?')) { return }		

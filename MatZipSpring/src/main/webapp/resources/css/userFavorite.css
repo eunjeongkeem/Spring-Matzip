@@ -19,7 +19,7 @@
 
 .f-item .img {
 	width: 300px;
-	background: black;
+	overflow-y: hidden; 
 }
 
 .f-item .img img {
@@ -53,7 +53,7 @@
 
 .f-item .ctnt .bottom {
 	flex-grow: 1;
-	background: navy; 
+	background: beige; 
 }
 
 .f-item .ctnt .f-title {
@@ -64,3 +64,30 @@
 .f-item .ctnt .f-fav {
 	width: 100px;
 }
+
+
+.f-item .ctnt .bottom {
+	overflow-x: hidden; 
+	display: flex;
+}
+
+.f-item .ctnt .bottom .recMenuItem {
+	width: 110px;
+}
+.f-item .ctnt .bottom .recMenuItem:not(:first-child) {
+	margin-left: 3px;
+}
+
+.f-item .ctnt .bottom .recMenuItem .pic {
+	width: 100%;
+	
+}
+
+.f-item .ctnt .bottom .recMenuItem img {
+	width: 100%;
+}
+.f-item .ctnt .bottom .recMenuItem a {
+	text-decoration: none;
+}
+
+
